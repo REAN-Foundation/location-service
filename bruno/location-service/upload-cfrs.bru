@@ -1,0 +1,19 @@
+{
+  "name": "Upload CFRs",
+  "request": {
+    "method": "POST",
+    "url": "http://localhost:3000/api/v1/{{tenantId}}/upload-cfrs",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "cfrs": [
+        {
+          "name": "John Doe",
+          "latitude": 12.3456,
+          "longitude": 78.9012
+        }
+      ]
+    }
+  }
+}

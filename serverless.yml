@@ -1,0 +1,32 @@
+service: location-service
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  environment:
+    NODE_ENV: production
+    PORT: 3000
+    DB_HOST: 
+    DB_PORT: 5432
+    DB_USER: 
+    DB_PASS: 
+    DB_NAME: 
+  apiGateway:
+    binaryMediaTypes:
+      - '*/*'
+  region: 
+
+functions:
+  app:
+    handler: src/index.handler
+    timeout: 30 
+    events:
+      - http:
+          path: /
+          method: any
+      - http:
+          path: "{proxy+}"
+          method: any
+
+plugins:
+  - serverless-offline
