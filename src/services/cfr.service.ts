@@ -38,11 +38,12 @@ export class CFRService {
                     locationpoint::geography
                     ) AS distance
             FROM cfr_locations
-            ${filters.RadiusInKm ? `WHERE ST_Distance(
-                    ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
-                    locationpoint::geography
-                    ) <= ${filters.RadiusInKm * 1000}` : ''}
-                    AND tenantId = '${tenantId}'
+                WHERE 
+                    tenantId = '${tenantId}'
+                    ${filters.RadiusInKm ? `AND ST_Distance(
+                            ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
+                            locationpoint::geography
+                            ) <= ${filters.RadiusInKm * 1000}` : ''}
             ORDER BY distance
             LIMIT ${filters.ItemsPerPage};
             `;
@@ -65,11 +66,12 @@ export class CFRService {
                     locationpoint::geography
                     ) AS distance
             FROM ambulance_locations
-            ${filters.RadiusInKm ? `WHERE ST_Distance(
-                    ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
-                    locationpoint::geography
-                    ) <= ${filters.RadiusInKm * 1000}` : ''}
-                    AND tenantId = '${tenantId}'
+                WHERE
+                    tenantId = '${tenantId}'
+                    ${filters.RadiusInKm ? `AND ST_Distance(
+                            ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
+                            locationpoint::geography
+                            ) <= ${filters.RadiusInKm * 1000}` : ''}
             ORDER BY distance
             LIMIT ${filters.ItemsPerPage};
             `;
