@@ -13,7 +13,7 @@ export interface CFRCreateModel {
     Address?: string;
     Latitude?: number;
     Longitude?: number;
-    PhoneNumber?: string;
+    Phone?: string;
 }
 
 export interface AmbulanceCreateModel {
@@ -22,5 +22,5 @@ export interface AmbulanceCreateModel {
     Address?: string;
     Latitude?: number;
     Longitude?: number;
-    PhoneNumber?: string;
+    Phone?: string;
 }

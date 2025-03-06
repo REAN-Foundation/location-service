@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "6288b43f-505f-44da-b502-a4db5ec1fae3",
+		"name": "location-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22334730"
+	},
+	"item": [
+		{
+			"name": "Upload CFRs",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/91920/Documents/rean-admin-panel-reanfoundation/location-service/cfr_locations_pune.xlsx"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/{{TENANTID}}/upload-cfrs",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{TENANTID}}",
+						"upload-cfrs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload ambulances",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/91920/Documents/rean-admin-panel-reanfoundation/location-service/ambulance_locations_pune.xlsx"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/{{TENANTID}}/upload-ambulances",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{TENANTID}}",
+						"upload-ambulances"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find nearest CFRs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/{{TENANTID}}/nearest-cfrs?latitude=18.8000&longitude=73.847&radiusInKm=2&itemsPerPage=5",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{TENANTID}}",
+						"nearest-cfrs"
+					],
+					"query": [
+						{
+							"key": "latitude",
+							"value": "18.8000"
+						},
+						{
+							"key": "longitude",
+							"value": "73.847"
+						},
+						{
+							"key": "radiusInKm",
+							"value": "2"
+						},
+						{
+							"key": "itemsPerPage",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find nearest ambulances",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/{{TENANTID}}/nearest-ambulances?latitude=18.8000&longitude=73.847&radiusInKm=2&itemsPerPage=5",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"{{TENANTID}}",
+						"nearest-ambulances"
+					],
+					"query": [
+						{
+							"key": "latitude",
+							"value": "18.8000"
+						},
+						{
+							"key": "longitude",
+							"value": "73.847"
+						},
+						{
+							"key": "radiusInKm",
+							"value": "2"
+						},
+						{
+							"key": "itemsPerPage",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

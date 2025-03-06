@@ -31,11 +31,11 @@ export class CFRController {
             const tenantId = await this._validator.validateTenantId(request.params.tenantId);
             const filters = await this._validator.validateNearestCFRsRequest(request.query);
             const searchResults = await this._service.getNearestCFRs(filters, tenantId);
-            ResponseHandler.success(request, response, 'Nearest CFR retrieved successfully!', 200, {
-            CFR : searchResults
+            ResponseHandler.success(request, response, 'Nearest responders retrieved successfully!', 200, {
+            Items : searchResults
         });
         } catch (error: any) {
-            console.error('Error fetching CFRs:', error);
+            console.error('Error fetching responders:', error);
             ResponseHandler.handleError(request, response, error);
         }
       };
@@ -46,7 +46,7 @@ export class CFRController {
             const filters = await this._validator.validateNearestAmbulancesRequest(request.query);
             const searchResults = await this._service.getNearestAmbulances(filters, tenantId);
             ResponseHandler.success(request, response, 'Nearest ambulances retrieved successfully!', 200, {
-            CFR : searchResults
+            Items : searchResults
         });
         } catch (error: any) {
             console.error('Error fetching ambulances:', error);
@@ -68,7 +68,7 @@ export class CFRController {
                 Address: row.getCell(2).value ? String(row.getCell(2).value) : undefined,
                 Latitude: row.getCell(3).value ? Number(row.getCell(3).value) : undefined,
                 Longitude: row.getCell(4).value ? Number(row.getCell(4).value) : undefined,
-                PhoneNumber: row.getCell(5).value ? String(row.getCell(5).value) : undefined,
+                Phone: row.getCell(5).value ? String(row.getCell(5).value) : undefined,
             };
             rows.push(rowData);
           }
@@ -76,7 +76,7 @@ export class CFRController {
 
         if (rows.length > 0) {
             const deletedRowCount = await this._service.deleteCFRsByTenantId(tenantId);
-            Logger.instance().log(`Deleted ${deletedRowCount} existing CFRs`);
+            Logger.instance().log(`Deleted ${deletedRowCount} existing responders`);
         }
       
         const cfrs: CFRDto[] = [];
@@ -86,20 +86,20 @@ export class CFRController {
                 domainModel = await this._validator.validateCreateRequest(row);
                 const cfr = await this._service.createCFR(domainModel);
                 if (!cfr) {
-                    Logger.instance().log(`Error creating CFR: ${JSON.stringify(row, null, 2)}`);
+                    Logger.instance().log(`Error creating responders: ${JSON.stringify(row, null, 2)}`);
                     continue;
                 }
                 cfrs.push(cfr);
             } catch (error) {
-                Logger.instance().log(`Error creating CFR: ${JSON.stringify(row, null, 2)}`);
+                Logger.instance().log(`Error creating responders: ${JSON.stringify(row, null, 2)}`);
             }
 
         }
-        ResponseHandler.success(request, response, 'CFR uploaded successfully!', 201, {
+        ResponseHandler.success(request, response, 'Responders uploaded successfully!', 201, {
             CFRs : cfrs,
         });
        } catch (error: any) {
-            console.error('Error fetching CFRs:', error);
+            console.error('Error fetching responders:', error);
             ResponseHandler.handleError(request, response, error);
         }
       }
@@ -118,7 +118,7 @@ export class CFRController {
                 Address: row.getCell(2).value ? String(row.getCell(2).value) : undefined,
                 Latitude: row.getCell(3).value ? Number(row.getCell(3).value) : undefined,
                 Longitude: row.getCell(4).value ? Number(row.getCell(4).value) : undefined,
-                PhoneNumber: row.getCell(5).value ? String(row.getCell(5).value) : undefined,
+                Phone: row.getCell(5).value ? String(row.getCell(5).value) : undefined,
             };
             rows.push(rowData);
           }

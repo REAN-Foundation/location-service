@@ -7,7 +7,7 @@ export interface CFRDto {
     Address: string,
     Latitude?: number,
     Longitude?: number,
-    PhoneNumber?: string,
+    Phone?: string,
 }
 
 export interface AmbulanceDto {
@@ -17,5 +17,5 @@ export interface AmbulanceDto {
     Address: string,
     Latitude?: number,
     Longitude?: number,
-    PhoneNumber?: string,
+    Phone?: string,
 }

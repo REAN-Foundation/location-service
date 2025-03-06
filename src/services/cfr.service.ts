@@ -9,8 +9,8 @@ export class CFRService {
 
     createCFR = async (model: CFRCreateModel) => {
         const query = `
-          INSERT INTO cfr_locations (name, address, latitude, longitude, phoneNumber, tenantid,  locationpoint)
-          VALUES ('${model.Name}', '${model.Address}', ${model.Latitude}, ${model.Longitude}, '${model.PhoneNumber}', '${model.TenantId}', ST_SetSRID(ST_MakePoint(${model.Latitude}, ${model.Longitude}), 4326)) RETURNING *
+          INSERT INTO cfr_locations (name, address, latitude, longitude, phone, tenantid,  locationpoint)
+          VALUES ('${model.Name}', '${model.Address}', ${model.Latitude}, ${model.Longitude}, '${model.Phone}', '${model.TenantId}', ST_SetSRID(ST_MakePoint(${model.Latitude}, ${model.Longitude}), 4326)) RETURNING *
         `;
         const result = await pool.query(query);
         if (result.rows.length > 0) {
@@ -20,8 +20,8 @@ export class CFRService {
 
     createAmbulance = async (model: AmbulanceCreateModel) => {
         const query = `
-          INSERT INTO ambulance_locations (name, address, latitude, longitude, phoneNumber, tenantid, locationpoint)
-          VALUES ('${model.Name}', '${model.Address}', ${model.Latitude}, ${model.Longitude}, '${model.PhoneNumber}', '${model.TenantId}', ST_SetSRID(ST_MakePoint(${model.Latitude}, ${model.Longitude}), 4326)) RETURNING *
+          INSERT INTO ambulance_locations (name, address, latitude, longitude, phone, tenantid, locationpoint)
+          VALUES ('${model.Name}', '${model.Address}', ${model.Latitude}, ${model.Longitude}, '${model.Phone}', '${model.TenantId}', ST_SetSRID(ST_MakePoint(${model.Latitude}, ${model.Longitude}), 4326)) RETURNING *
         `;
         const result = await pool.query(query);
         if (result.rows.length > 0) {
@@ -32,7 +32,7 @@ export class CFRService {
     getNearestCFRs = async (filters: CFROrAmbulanceSearchFilter, tenantId: string)=> {
         
         const query = `
-            SELECT name, address, latitude, longitude, phonenumber,
+            SELECT name, address, latitude, longitude, phone,
                     ST_Distance(
                     ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
                     locationpoint::geography
@@ -60,7 +60,7 @@ export class CFRService {
 
     getNearestAmbulances = async (filters: CFROrAmbulanceSearchFilter, tenantId: string)=> {
         const query = `
-            SELECT name, address, latitude, longitude, phonenumber,
+            SELECT name, address, latitude, longitude, phone,
                     ST_Distance(
                     ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
                     locationpoint::geography

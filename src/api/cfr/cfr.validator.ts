@@ -54,7 +54,7 @@ export class CFRValidator {
                 Address: joi.string().optional(),
                 Latitude    : joi.number().required(),
                 Longitude   : joi.number().required(),
-                PhoneNumber  : joi.string().required()
+                Phone  : joi.string().required()
             });
             await schema.validateAsync(requestBody);
             return this.getCreateModel(requestBody);
@@ -70,7 +70,7 @@ export class CFRValidator {
             Address: requestBody.Address ?? null,
             Latitude: requestBody.Latitude,
             Longitude: requestBody.Longitude,
-            PhoneNumber: requestBody.PhoneNumber
+            Phone: requestBody.Phone
         };
         return model;
     };

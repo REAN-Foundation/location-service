@@ -12,7 +12,7 @@ export class CFRMapper {
             Address: cfr.address,
             Latitude: cfr.latitude,
             Longitude: cfr.longitude,
-            PhoneNumber: cfr.phonenumber
+            Phone: cfr.phone
         }
         return dto
     }
@@ -28,7 +28,7 @@ export class CFRMapper {
             Address: cfr.address,
             Latitude: cfr.latitude,
             Longitude: cfr.longitude,
-            PhoneNumber: cfr.phonenumber
+            Phone: cfr.phone
         }
         return dto
     }
