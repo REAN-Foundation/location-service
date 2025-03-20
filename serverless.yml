@@ -3,23 +3,29 @@ service: location-service
 provider:
   name: aws
   runtime: nodejs18.x
-  environment:
-    NODE_ENV: production
-    PORT: 3000
-    DB_HOST: 
-    DB_PORT: 5432
-    DB_USER: 
-    DB_PASS: 
-    DB_NAME: 
+  vpc:
+    securityGroupIds:
+      - ${ssm:/location-service/security-group-id}
+    subnetIds:
+      - ${ssm:/location-service/subnet-id}
+  # environment:
+  #   NODE_ENV: production
+  #   PORT: 3000
+  #   DB_HOST: ${env:DB_HOST}
+  #   DB_PORT: 5432
+  #   DB_USER: ${env:DB_USER}
+  #   DB_PASS: ${env:DB_PASSWORD}
+  #   DB_NAME: ${env:DB_NAME}
   apiGateway:
     binaryMediaTypes:
       - '*/*'
-  region: 
+  region: us-west-2
+  stage: dev
 
 functions:
   app:
     handler: src/index.handler
-    timeout: 30 
+    timeout: 30
     events:
       - http:
           path: /
@@ -30,3 +36,8 @@ functions:
 
 plugins:
   - serverless-offline
+  - serverless-dotenv-plugin
+
+custom:
+  dotenv:
+    path: .env

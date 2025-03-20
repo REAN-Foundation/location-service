@@ -36,6 +36,7 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.13.0",
     "@types/pg": "^8.11.11",
+    "serverless-dotenv-plugin": "^6.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   }
