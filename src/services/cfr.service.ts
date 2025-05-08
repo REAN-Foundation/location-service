@@ -50,7 +50,7 @@ export class CFRService {
           let { rows } = await pool.query(query);
           
           if (rows.length === 0 && filters.RadiusInKm) {
-             await this.getCFRs(filters, tenantId);
+             rows = await this.getCFRs(filters, tenantId);
             }
 
           const searchResults: CFRDto[] = [];
