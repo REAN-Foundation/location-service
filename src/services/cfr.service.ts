@@ -47,7 +47,11 @@ export class CFRService {
             ORDER BY distance
             LIMIT ${filters.ItemsPerPage};
             `;
-          const { rows } = await pool.query(query);
+          let { rows } = await pool.query(query);
+          
+          if (rows.length === 0 && filters.RadiusInKm) {
+             await this.getCFRs(filters, tenantId);
+            }
 
           const searchResults: CFRDto[] = [];
           for (let i = 0; i < rows.length; i++) {
@@ -75,8 +79,12 @@ export class CFRService {
             ORDER BY distance
             LIMIT ${filters.ItemsPerPage};
             `;
-          const { rows } = await pool.query(query);
+          let { rows } = await pool.query(query);
 
+          if (rows.length === 0 && filters.RadiusInKm) {
+            rows = await this.getAmbulances(filters, tenantId);
+          }
+          
           const searchResults: AmbulanceDto[] = [];
           for (let i = 0; i < rows.length; i++) {
               rows[i] = CFRMapper.toAmbulanceDto(rows[i]);
@@ -97,4 +105,39 @@ export class CFRService {
         const result = await pool.query(query);
         return result.rowCount;
     }
+
+    getCFRs = async (filters: CFROrAmbulanceSearchFilter, tenantId: string)=> {
+        const query = `
+            SELECT name, address, latitude, longitude, phone,
+                    ST_Distance(
+                    ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
+                    locationpoint::geography
+                    ) AS distance
+            FROM cfr_locations
+                WHERE 
+                    tenantId = '${tenantId}'
+            ORDER BY distance
+            LIMIT ${filters.ItemsPerPage};
+            `;
+          const { rows } = await pool.query(query);
+          return rows;
+     };
+
+    getAmbulances = async (filters: CFROrAmbulanceSearchFilter, tenantId: string)=> {
+        const query = `
+            SELECT name, address, latitude, longitude, phone,
+                    ST_Distance(
+                    ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
+                    locationpoint::geography
+                    ) AS distance
+            FROM ambulance_locations
+                WHERE 
+                    tenantId = '${tenantId}'
+            ORDER BY distance
+            LIMIT ${filters.ItemsPerPage};
+            `;
+          const { rows } = await pool.query(query);
+          return rows;
+     };
+   
 }
