@@ -49,9 +49,9 @@ export class CFRService {
             `;
           let { rows } = await pool.query(query);
           
-          if (rows.length === 0 && filters.RadiusInKm) {
-             rows = await this.getCFRs(filters, tenantId);
-            }
+        //   if (rows.length === 0 && filters.RadiusInKm) {
+        //      rows = await this.getCFRs(filters, tenantId);
+        //     }
 
           const searchResults: CFRDto[] = [];
           for (let i = 0; i < rows.length; i++) {
