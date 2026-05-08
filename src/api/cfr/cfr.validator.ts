@@ -12,7 +12,8 @@ export class CFRValidator {
                 latitude    : joi.number().required(),
                 longitude   : joi.number().required(),
                 radiusInKm  : joi.number().optional(),
-                itemsPerPage: joi.number().optional()
+                itemsPerPage: joi.number().optional(),
+                reporterPhone : joi.string().optional()
             });
             await schema.validateAsync(requestBody);
             return this.getSearchFilter(requestBody);
@@ -80,7 +81,8 @@ export class CFRValidator {
             Latitude: requestBody.latitude ?? null,
             Longitude: requestBody.longitude ?? null,
             RadiusInKm: requestBody.radiusInKm ?? null,
-            ItemsPerPage: requestBody.itemsPerPage ?? 25
+            ItemsPerPage: requestBody.itemsPerPage ?? 25,
+            ReporterPhone: requestBody.reporterPhone ?? null
         };
         return filters;
     }
