@@ -53,12 +53,13 @@ export class CFRService {
         //      rows = await this.getCFRs(filters, tenantId);
         //     }
 
-          const searchResults: CFRDto[] = [];
+          let searchResults: CFRDto[] = [];
           for (let i = 0; i < rows.length; i++) {
               rows[i] = CFRMapper.toDto(rows[i]);
               searchResults.push(rows[i]);
           }
 
+          searchResults = this.removeSelfReportingCFR (searchResults, filters);
           return searchResults;
      };
 
@@ -140,4 +141,10 @@ export class CFRService {
           return rows;
      };
    
+     removeSelfReportingCFR = (cfrs: CFRDto[], filters: CFROrAmbulanceSearchFilter) => {
+        if (cfrs.length > 0 && filters.ReporterPhone) {
+            return cfrs.filter(cfr => cfr.Phone !== filters.ReporterPhone);
+        }
+        return cfrs;
+    }
 }
