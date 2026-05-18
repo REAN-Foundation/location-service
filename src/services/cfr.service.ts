@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
 import {pool} from "../config/db";
-import { AmbulanceCreateModel, CFRCreateModel, CFROrAmbulanceSearchFilter } from "../domain.types/cfr/cfr.domain.types";
+import { AmbulanceCreateModel, CFRCreateModel, CFROrAmbulanceSearchFilter, CFRUpdateLocationModel } from "../domain.types/cfr/cfr.domain.types";
 import { CFRMapper } from "../mapper/cfr.mapper";
 import { AmbulanceDto, CFRDto } from "../domain.types/cfr/cfr.dto";
 
@@ -94,6 +94,21 @@ export class CFRService {
 
           return searchResults;
      };
+
+    updateCFRLocation = async (model: CFRUpdateLocationModel, tenantId: string): Promise<CFRDto | null> => {
+        const query = `
+            UPDATE cfr_locations
+            SET latitude = $1, longitude = $2,
+                locationpoint = ST_SetSRID(ST_MakePoint($1, $2), 4326)
+            WHERE phone = $3 AND tenantid = $4
+            RETURNING *
+        `;
+        const result = await pool.query(query, [model.Latitude, model.Longitude, model.Phone, tenantId]);
+        if (result.rows.length === 0) {
+            return null;
+        }
+        return CFRMapper.toDto(result.rows[0]);
+    }
 
      deleteCFRsByTenantId = async (tenantId: string) => {
         const query = `DELETE FROM cfr_locations WHERE tenantid = '${tenantId}'`;

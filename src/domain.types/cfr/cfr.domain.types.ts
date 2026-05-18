@@ -25,3 +25,9 @@ export interface AmbulanceCreateModel {
     Longitude?: number;
     Phone?: string;
 }
+
+export interface CFRUpdateLocationModel {
+    Phone: string;
+    Latitude: number;
+    Longitude: number;
+}
