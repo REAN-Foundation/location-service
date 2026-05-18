@@ -154,6 +154,21 @@ export class CFRController {
         }
       }
 
+      updateCFRLocation = async (request: Request, response: Response): Promise<void> => {
+        try {
+            const tenantId = await this._validator.validateTenantId(request.params.tenantId);
+            const model = await this._validator.validateUpdateLocationRequest(request.params.phone, request.body);
+            const updated = await this._service.updateCFRLocation(model, tenantId);
+            if (!updated) {
+                ResponseHandler.failure(request, response, 'Responder not found!', 404);
+                return;
+            }
+            ResponseHandler.success(request, response, 'Responder location updated successfully!', 200, { CFR: updated });
+        } catch (error: any) {
+            ResponseHandler.handleError(request, response, error);
+        }
+      };
+
       private validateUploadedFile = (request: Request): string => {
         const uploadedFilePath = request.file?.path;
         if (!uploadedFilePath) {

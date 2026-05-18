@@ -1,6 +1,6 @@
 import * as joi from 'joi';
 import { ErrorHandler } from '../../common/error.handler';
-import { CFRCreateModel, CFROrAmbulanceSearchFilter } from '../../domain.types/cfr/cfr.domain.types';
+import { CFRCreateModel, CFROrAmbulanceSearchFilter, CFRUpdateLocationModel } from '../../domain.types/cfr/cfr.domain.types';
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -86,5 +86,22 @@ export class CFRValidator {
         };
         return filters;
     }
+
+    validateUpdateLocationRequest = async (phone: string, requestBody): Promise<CFRUpdateLocationModel> => {
+        try {
+            const schema = joi.object({
+                Latitude : joi.number().required(),
+                Longitude: joi.number().required(),
+            });
+            await schema.validateAsync(requestBody);
+            return {
+                Phone    : phone,
+                Latitude : requestBody.Latitude,
+                Longitude: requestBody.Longitude,
+            };
+        } catch (error) {
+            ErrorHandler.handleValidationError(error);
+        }
+    };
 
 }
