@@ -157,7 +157,7 @@ export class CFRController {
       updateCFRLocation = async (request: Request, response: Response): Promise<void> => {
         try {
             const tenantId = await this._validator.validateTenantId(request.params.tenantId);
-            const model = await this._validator.validateUpdateLocationRequest(request.params.phone, request.query);
+            const model = await this._validator.validateUpdateLocationRequest(request.query);
             const updated = await this._service.updateCFRLocation(model, tenantId);
             if (!updated) {
                 ResponseHandler.failure(request, response, 'Responder not found!', 404);

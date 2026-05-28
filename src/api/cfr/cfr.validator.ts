@@ -87,15 +87,16 @@ export class CFRValidator {
         return filters;
     }
 
-    validateUpdateLocationRequest = async (phone: string, requestBody): Promise<CFRUpdateLocationModel> => {
+    validateUpdateLocationRequest = async (requestBody): Promise<CFRUpdateLocationModel> => {
         try {
             const schema = joi.object({
+                Phone: joi.string().required(),
                 Latitude : joi.number().required(),
                 Longitude: joi.number().required(),
             });
             await schema.validateAsync(requestBody);
             return {
-                Phone    : phone,
+                Phone    : requestBody.Phone,
                 Latitude : requestBody.Latitude,
                 Longitude: requestBody.Longitude,
             };
