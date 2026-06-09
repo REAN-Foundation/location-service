@@ -63,6 +63,33 @@ export class CFRService {
           return searchResults;
      };
 
+    getNearestCFRs1 = async (filters: CFROrAmbulanceSearchFilter, tenantId: string): Promise<CFRDto[]> => {
+        const query = `
+            SELECT name, address, latitude, longitude, phone,
+                    ST_Distance(
+                    ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography,
+                    locationpoint::geography
+                    ) AS distance
+            FROM cfr_locations
+                WHERE
+                    tenantId = '${tenantId}'
+                    ${filters.MaxRadiusInKm ? `AND ST_Distance(
+                            ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography,
+                            locationpoint::geography
+                            ) <= ${filters.MaxRadiusInKm * 1000}` : ''}
+                    ${filters.MinRadiusInKm ? `AND ST_Distance(
+                            ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography,
+                            locationpoint::geography
+                            ) >= ${filters.MinRadiusInKm * 1000}` : ''}
+            ORDER BY distance
+            LIMIT ${filters.ItemsPerPage};
+        `;
+        const { rows } = await pool.query(query);
+        let searchResults: CFRDto[] = rows.map(row => CFRMapper.toDto(row));
+        searchResults = this.removeSelfReportingCFR(searchResults, filters);
+        return searchResults;
+    };
+
     getNearestAmbulances = async (filters: CFROrAmbulanceSearchFilter, tenantId: string)=> {
         const query = `
             SELECT name, address, latitude, longitude, phone,

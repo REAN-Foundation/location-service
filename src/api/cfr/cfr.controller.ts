@@ -40,6 +40,20 @@ export class CFRController {
         }
       };
 
+      getNearestCFRs1 = async (request: Request, response: Response): Promise<void> => {
+        try {
+            const tenantId = await this._validator.validateTenantId(request.params.tenantId);
+            const filters = await this._validator.validateNearestCFRs1Request(request.query);
+            const searchResults = await this._service.getNearestCFRs1(filters, tenantId);
+            ResponseHandler.success(request, response, 'Nearest responders retrieved successfully!', 200, {
+            Items : searchResults
+        });
+        } catch (error: any) {
+            console.error('Error fetching responders:', error);
+            ResponseHandler.handleError(request, response, error);
+        }
+      };
+
       getNearestAmbulances = async (request: Request, response: Response): Promise<void> => {
         try {
             const tenantId = await this._validator.validateTenantId(request.params.tenantId);
