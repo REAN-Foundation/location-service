@@ -5,6 +5,8 @@ export interface CFROrAmbulanceSearchFilter extends BaseSearchFilter {
     Latitude?: number;
     Longitude?: number;
     RadiusInKm?: number;
+    MinRadiusInKm?: number;
+    MaxRadiusInKm?: number;
     ReporterPhone?: string;
 }
 
