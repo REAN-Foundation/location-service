@@ -10,8 +10,8 @@ export const register = (app: express.Application): void => {
 
     multerFileUploadMiddleware(router);
     
-    // router.get('/:tenantId/nearest-responders', controller.getNearestCFRs);
-    router.get('/:tenantId/nearest-responders', controller.getNearestCFRs1)
+    router.get('/:tenantId/nearest-responders', controller.getNearestCFRs);
+    // router.get('/:tenantId/nearest-responders', controller.getNearestCFRs1)
     router.get('/:tenantId/nearest-ambulances', controller.getNearestAmbulances);
     router.put('/:tenantId/responders', controller.updateCFRLocation);
     router.post('/:tenantId/upload-responders', controller.uploadCFRs);
