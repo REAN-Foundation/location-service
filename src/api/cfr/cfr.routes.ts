@@ -13,6 +13,7 @@ export const register = (app: express.Application): void => {
     router.get('/:tenantId/nearest-responders', controller.getNearestCFRs);
     router.get('/:tenantId/nearest-responders1', controller.getNearestCFRs1)
     router.get('/:tenantId/nearest-ambulances', controller.getNearestAmbulances);
+    router.get('/:tenantId/responders/exists', controller.responderExists);
     router.put('/:tenantId/responders', controller.updateCFRLocation);
     router.post('/:tenantId/upload-responders', controller.uploadCFRs);
     router.post('/:tenantId/upload-ambulances', controller.uploadAmbulances);

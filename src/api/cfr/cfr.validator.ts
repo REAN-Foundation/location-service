@@ -120,6 +120,20 @@ export class CFRValidator {
         };
     };
 
+    validateResponderExistsRequest = async (requestBody): Promise<{ Phone: string }> => {
+        try {
+            const schema = joi.object({
+                Phone: joi.string().required(),
+            });
+            await schema.validateAsync(requestBody);
+            return {
+                Phone: requestBody.Phone,
+            };
+        } catch (error) {
+            ErrorHandler.handleValidationError(error);
+        }
+    };
+
     validateUpdateLocationRequest = async (requestBody): Promise<CFRUpdateLocationModel> => {
         try {
             const schema = joi.object({
