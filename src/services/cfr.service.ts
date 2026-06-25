@@ -122,6 +122,17 @@ export class CFRService {
           return searchResults;
      };
 
+    responderExists = async (phone: string, tenantId: string): Promise<boolean> => {
+        const query = `
+            SELECT 1
+            FROM cfr_locations
+            WHERE phone = $1 AND tenantid = $2
+            LIMIT 1
+        `;
+        const result = await pool.query(query, [phone, tenantId]);
+        return result.rows.length > 0;
+    }
+
     updateCFRLocation = async (model: CFRUpdateLocationModel, tenantId: string): Promise<CFRDto | null> => {
         const query = `
             UPDATE cfr_locations

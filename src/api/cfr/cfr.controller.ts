@@ -168,6 +168,17 @@ export class CFRController {
         }
       }
 
+      responderExists = async (request: Request, response: Response): Promise<void> => {
+        try {
+            const tenantId = await this._validator.validateTenantId(request.params.tenantId);
+            const model = await this._validator.validateResponderExistsRequest(request.query);
+            const exists = await this._service.responderExists(model.Phone, tenantId);
+            ResponseHandler.success(request, response, 'Responder existence checked successfully!', 200, { Exists: exists });
+        } catch (error: any) {
+            ResponseHandler.handleError(request, response, error);
+        }
+      };
+
       updateCFRLocation = async (request: Request, response: Response): Promise<void> => {
         try {
             const tenantId = await this._validator.validateTenantId(request.params.tenantId);
