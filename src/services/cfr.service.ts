@@ -10,7 +10,7 @@ export class CFRService {
     createCFR = async (model: CFRCreateModel) => {
         const query = `
           INSERT INTO cfr_locations (name, address, latitude, longitude, phone, tenantid,  locationpoint)
-          VALUES ('${model.Name}', '${model.Address}', ${model.Latitude}, ${model.Longitude}, '${model.Phone}', '${model.TenantId}', ST_SetSRID(ST_MakePoint(${model.Latitude}, ${model.Longitude}), 4326)) RETURNING *
+          VALUES ('${model.Name}', '${model.Address}', ${model.Latitude}, ${model.Longitude}, '${model.Phone}', '${model.TenantId}', ST_SetSRID(ST_MakePoint(${model.Longitude}, ${model.Latitude}), 4326)) RETURNING *
         `;
         const result = await pool.query(query);
         if (result.rows.length > 0) {
@@ -21,7 +21,7 @@ export class CFRService {
     createAmbulance = async (model: AmbulanceCreateModel) => {
         const query = `
           INSERT INTO ambulance_locations (name, address, latitude, longitude, phone, tenantid, locationpoint)
-          VALUES ('${model.Name}', '${model.Address}', ${model.Latitude}, ${model.Longitude}, '${model.Phone}', '${model.TenantId}', ST_SetSRID(ST_MakePoint(${model.Latitude}, ${model.Longitude}), 4326)) RETURNING *
+          VALUES ('${model.Name}', '${model.Address}', ${model.Latitude}, ${model.Longitude}, '${model.Phone}', '${model.TenantId}', ST_SetSRID(ST_MakePoint(${model.Longitude}, ${model.Latitude}), 4326)) RETURNING *
         `;
         const result = await pool.query(query);
         if (result.rows.length > 0) {
@@ -34,14 +34,14 @@ export class CFRService {
         const query = `
             SELECT name, address, latitude, longitude, phone,
                     ST_Distance(
-                    ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
+                    ST_SetSRID(ST_MakePoint(${filters.Longitude}, ${filters.Latitude}), 4326)::geography, 
                     locationpoint::geography
                     ) AS distance
             FROM cfr_locations
                 WHERE 
                     tenantId = '${tenantId}'
                     ${filters.RadiusInKm ? `AND ST_Distance(
-                            ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
+                            ST_SetSRID(ST_MakePoint(${filters.Longitude}, ${filters.Latitude}), 4326)::geography, 
                             locationpoint::geography
                             ) <= ${filters.RadiusInKm * 1000}` : ''}
             ORDER BY distance
@@ -67,18 +67,18 @@ export class CFRService {
         const query = `
             SELECT name, address, latitude, longitude, phone,
                     ST_Distance(
-                    ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography,
+                    ST_SetSRID(ST_MakePoint(${filters.Longitude}, ${filters.Latitude}), 4326)::geography,
                     locationpoint::geography
                     ) AS distance
             FROM cfr_locations
                 WHERE
                     tenantId = '${tenantId}'
                     ${filters.MaxRadiusInKm ? `AND ST_Distance(
-                            ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography,
+                            ST_SetSRID(ST_MakePoint(${filters.Longitude}, ${filters.Latitude}), 4326)::geography,
                             locationpoint::geography
                             ) <= ${filters.MaxRadiusInKm * 1000}` : ''}
                     ${filters.MinRadiusInKm ? `AND ST_Distance(
-                            ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography,
+                            ST_SetSRID(ST_MakePoint(${filters.Longitude}, ${filters.Latitude}), 4326)::geography,
                             locationpoint::geography
                             ) >= ${filters.MinRadiusInKm * 1000}` : ''}
             ORDER BY distance
@@ -94,14 +94,14 @@ export class CFRService {
         const query = `
             SELECT name, address, latitude, longitude, phone,
                     ST_Distance(
-                    ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
+                    ST_SetSRID(ST_MakePoint(${filters.Longitude}, ${filters.Latitude}), 4326)::geography, 
                     locationpoint::geography
                     ) AS distance
             FROM ambulance_locations
                 WHERE
                     tenantId = '${tenantId}'
                     ${filters.RadiusInKm ? `AND ST_Distance(
-                            ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
+                            ST_SetSRID(ST_MakePoint(${filters.Longitude}, ${filters.Latitude}), 4326)::geography, 
                             locationpoint::geography
                             ) <= ${filters.RadiusInKm * 1000}` : ''}
             ORDER BY distance
@@ -137,7 +137,7 @@ export class CFRService {
         const query = `
             UPDATE cfr_locations
             SET latitude = $1, longitude = $2,
-                locationpoint = ST_SetSRID(ST_MakePoint($1, $2), 4326)
+                locationpoint = ST_SetSRID(ST_MakePoint($2, $1), 4326)
             WHERE phone = $3 AND tenantid = $4
             RETURNING *
         `;
@@ -164,7 +164,7 @@ export class CFRService {
         const query = `
             SELECT name, address, latitude, longitude, phone,
                     ST_Distance(
-                    ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
+                    ST_SetSRID(ST_MakePoint(${filters.Longitude}, ${filters.Latitude}), 4326)::geography, 
                     locationpoint::geography
                     ) AS distance
             FROM cfr_locations
@@ -181,7 +181,7 @@ export class CFRService {
         const query = `
             SELECT name, address, latitude, longitude, phone,
                     ST_Distance(
-                    ST_SetSRID(ST_MakePoint(${filters.Latitude}, ${filters.Longitude}), 4326)::geography, 
+                    ST_SetSRID(ST_MakePoint(${filters.Longitude}, ${filters.Latitude}), 4326)::geography, 
                     locationpoint::geography
                     ) AS distance
             FROM ambulance_locations
