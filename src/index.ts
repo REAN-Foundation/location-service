@@ -9,4 +9,4 @@ dotenv.config();
     await app.start();
 })();
 
-export const handler = serverless(Application.instance().app());
+// export const handler = serverless(Application.instance().app());
